@@ -16,18 +16,19 @@ public class ServidorMulticast extends Thread{
     private InetAddress direccion;
     private static String IP_MULTICAST= "225.228.225.228";
     private static int CHANGE_POS_TIME=5000;
+
     public ServidorMulticast (JuegoGuacamole juego) {
         this.juego=juego;
     }
     public void despliegue(){
         try {
             this.socket = new MulticastSocket(MULTICAST_PORT);
-                this.direccion=InetAddress.getByName(IP_MULTICAST);
+            this.direccion=InetAddress.getByName(IP_MULTICAST);
             socket.joinGroup(direccion);
 
         } catch (IOException ex) {
             System.out.println("ServidorMulticast: Problemas para unirse al grupo.");
-            //Logger.getLogger(ServidorMulticast.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServidorMulticast.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

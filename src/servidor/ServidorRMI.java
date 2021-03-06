@@ -16,7 +16,7 @@ public class ServidorRMI implements Registro {
         this.juego=juego;
     }
 
-    void despliega(){
+    void despliegue(){
         System.setProperty("java.security.policy","file:src/server/server.policy");
         if(System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
@@ -36,6 +36,12 @@ public class ServidorRMI implements Registro {
 
     @Override
     public boolean registrarJugador(String name) throws RemoteException {
-        return juego.agregaJugador(name);
+        boolean regis = juego.agregaJugador(name);
+        if (regis){
+            System.out.println(name + " se registró correctamente en el juego");
+        }else{
+            System.out.println("En la sala ya se encuentra "+ name);
+        }
+        return regis;
     }
 }

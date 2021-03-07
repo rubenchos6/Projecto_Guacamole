@@ -16,7 +16,7 @@ public class ServidorRMI implements Registro {
     }
 
     void despliegue(){
-        System.setProperty("java.security.policy","file:src/server/server.policy");
+        System.setProperty("java.security.policy","file:src/servidor/server.policy");
 
         if(System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());

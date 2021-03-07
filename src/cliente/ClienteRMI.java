@@ -15,7 +15,7 @@ public class ClienteRMI {
 
     public ClienteRMI(Cliente cliente) {
         this.cliente = cliente;
-        System.setProperty("java.security.policy","file:src/client/client.policy");
+        System.setProperty("java.security.policy","file:src/cliente/client.policy");
 
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());

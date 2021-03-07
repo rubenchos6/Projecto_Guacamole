@@ -39,7 +39,7 @@ public class ServidorMulticast extends Thread{
         while(true) {
             while (!juego.getFinalizado()) {
                 juego.mueveTopo();
-                String message = "Pos: "+juego.obtenPosicion();
+                String message = "Pos:"+juego.obtenPosicion();
                 byte[] m = message.getBytes();
                 DatagramPacket messageOut = new DatagramPacket(m, m.length, direccion, MULTICAST_PORT);
                 try {
@@ -52,7 +52,7 @@ public class ServidorMulticast extends Thread{
                 }
             }
 
-            String message = "W: " + juego.getWinner();
+            String message = "W:" + juego.getWinner();
             System.out.println("JUEGO TERMINADO");
             byte[] m = message.getBytes();
             DatagramPacket messageOut = new DatagramPacket(m, m.length, direccion, MULTICAST_PORT);

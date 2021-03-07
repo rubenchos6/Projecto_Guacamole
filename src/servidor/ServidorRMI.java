@@ -9,7 +9,6 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class ServidorRMI implements Registro {
 
-
     JuegoGuacamole juego;
 
     public ServidorRMI(JuegoGuacamole juego){
@@ -18,6 +17,7 @@ public class ServidorRMI implements Registro {
 
     void despliegue(){
         System.setProperty("java.security.policy","file:src/server/server.policy");
+
         if(System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
@@ -27,8 +27,7 @@ public class ServidorRMI implements Registro {
             Registro stub = (Registro) UnicastRemoteObject.exportObject(this,0);
             Registry registry = LocateRegistry.getRegistry();
             registry.rebind(name,stub);
-            System.out.println("Servicios desplegados");
-
+            System.out.println("RMI desplegado");
         } catch (RemoteException e) {
             e.printStackTrace();
         }

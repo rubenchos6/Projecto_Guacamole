@@ -1,5 +1,7 @@
 package servidor;
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -10,17 +12,21 @@ public class JuegoGuacamole {
     private HashMap<String, Integer> puntuacion;
     private int POINTS_TO_WIN = 3;
 
-    private int xPos, yPos; //Posicion del topo
-    private int n,m; //Dimensiones del tablero
+    private int pos; //Posicion del topo
+    private int n; //Dimensiones del tablero
 
     private boolean finalizado=false;
     private String winner;
+    private boolean topoGolpeado;
 
-    public JuegoGuacamole(int n, int m){
+    public JuegoGuacamole(int n){
         this.n=n;
-        this.m=m;
-        this.mueveTopo();
+        this.pos=0;
+        this.topoGolpeado=true;
+        this.usuarios= new HashSet<>();
+        this.puntuacion= new HashMap<>();
     }
+
     public boolean agregaJugador(String name){
         if(usuarios.contains(name)) return false;
         usuarios.add(name);
@@ -35,15 +41,15 @@ public class JuegoGuacamole {
 
     public void mueveTopo(){
         Random rand = new Random();
-        xPos = rand.nextInt(n);
-        yPos = rand.nextInt(m);
+        pos = rand.nextInt(n);
+        topoGolpeado=false;
     }
 
-    public int golpeJugador(String name, int i, int j){
+    public int golpeJugador(String name, int i){
         int curr = puntuacion.get(name);
-        if (xPos!=i || yPos!=j){
-            return curr;
-        }
+        if (finalizado || topoGolpeado) return curr;
+        if (pos != i) return curr;
+        topoGolpeado=true;
         curr++;
         puntuacion.put(name,curr);
         if(curr>=POINTS_TO_WIN){
@@ -53,13 +59,12 @@ public class JuegoGuacamole {
         return curr;
     }
 
+    public int obtenPosicion() {return pos;}
+
     public boolean getFinalizado(){
         return finalizado;
     }
 
-    public String obtenPosicion(){
-        return xPos+","+yPos;
-    }
     public String getWinner(){
         return winner;
     }

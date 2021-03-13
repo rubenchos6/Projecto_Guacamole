@@ -1,5 +1,7 @@
 package cliente;
 
+import estres.Globals;
+
 public class Cliente {
     private String name;
     private GameFrame frame;
@@ -14,7 +16,11 @@ public class Cliente {
         this.name = name;
         this.inGame = false;
     }
-
+    public Cliente(String name){
+        this.frame=null;
+        this.name=name;
+        this.inGame=false;
+    }
     public String getName() {
         return name;
     }
@@ -39,17 +45,37 @@ public class Cliente {
         this.inGame = inGame;
     }
 
+    public ClienteRMI getRmi() {
+        return rmi;
+    }
+
+    public ClienteMulticast getMulticast() {
+        return multicast;
+    }
+
+    public ClienteTCP getTcp() {
+        return tcp;
+    }
+
     public int golpeaTopo(int i) {
         return tcp.golpeaTopo(i);
     }
 
     public void reportWinner(String winner) {
-        frame.reportWinner(winner);
-        rmi.registra();
+        if(frame != null) {
+            frame.reportWinner(winner);
+        }
+        this.setInGame(false);
+        tcp.desconecta();
+        if(!Globals.debug) {
+           this.start();
+        }
     }
 
     public void cambiaTopo(int id) {
-        frame.cambiaTopo(id);
+        if(frame != null) {
+            frame.cambiaTopo(id);
+        }
     }
 
     public void start() {

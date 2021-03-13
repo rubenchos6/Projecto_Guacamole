@@ -31,14 +31,20 @@ public class ServidorTCP {
 
         @Override
         public void run() {
-            try {			                 // an echo server
-                while (true) {
+            try {// an echo server
+                boolean kill=false;
+                while (!kill) {
                     String mensaje = in.readUTF();
                     String[] arr = mensaje.split(":");
-                    String name = arr[0];
-                    int pos = Integer.parseInt(arr[1]);
-                    int puntuacion = juego.golpeJugador(name, pos); //actualizar resultados
-                    out.writeInt(puntuacion);
+                    if(arr[1].equals("kill")) {
+                        kill = true;
+                        out.writeUTF("Kill");
+                    }else{
+                        String name = arr[0];
+                        int pos = Integer.parseInt(arr[1]);
+                        int puntuacion = juego.golpeJugador(name, pos); //actualizar resultados
+                        out.writeInt(puntuacion);
+                    }
                 }
             }
             catch(EOFException e) {

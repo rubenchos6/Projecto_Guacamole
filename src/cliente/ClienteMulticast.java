@@ -1,5 +1,7 @@
 package cliente;
 
+import estres.Globals;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -30,7 +32,6 @@ public class ClienteMulticast extends Thread{
 
     @Override
     public void run() {
-        while (true) {
             boolean ganador = false;
             while (!ganador) {
                 try {
@@ -39,7 +40,7 @@ public class ClienteMulticast extends Thread{
                     socket.receive(messageIn);
 
                     String message = new String(messageIn.getData()).trim();
-                    System.out.println(message);
+                    if(!Globals.debug) System.out.println(message);
                     String arr[] = message.split(":");
                     if (arr[0].equals("W")) { //Se registra winner
                         ganador = true;
@@ -51,6 +52,7 @@ public class ClienteMulticast extends Thread{
                     Logger.getLogger(ClienteMulticast.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }
+            socket.close();
+
     }
 }

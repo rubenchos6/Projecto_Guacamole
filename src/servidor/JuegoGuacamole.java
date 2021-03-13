@@ -1,5 +1,8 @@
 package servidor;
 
+import estres.Globals;
+import jdk.nashorn.internal.objects.Global;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
@@ -10,7 +13,7 @@ public class JuegoGuacamole {
 
     private Set<String> usuarios;
     private HashMap<String, Integer> puntuacion;
-    private int POINTS_TO_WIN = 3;
+    private int POINTS_TO_WIN = Globals.points_2_win;
 
     private int pos; //Posicion del topo
     private int n; //Dimensiones del tablero

@@ -1,9 +1,13 @@
 package cliente;
 
+import estres.Globals;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,11 +15,14 @@ public class ClienteTCP {
     private static int TCP_PORT=7896;
     private Socket socket;
     private DataInputStream in;
+    private int erroresTCP;
+
     private DataOutputStream out;
     private Cliente cliente;
-
+    private List<Long> responseTime=new ArrayList<>();
     public ClienteTCP(Cliente cliente){
         this.cliente=cliente;
+        this.erroresTCP=0;
     }
 
     public Socket getSocket() {
@@ -42,6 +49,10 @@ public class ClienteTCP {
         this.out = out;
     }
 
+    public int getErroresTCP() {
+        return erroresTCP;
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
@@ -50,12 +61,24 @@ public class ClienteTCP {
         this.cliente = cliente;
     }
 
+    public List<Long> getResponseTime() {
+        return responseTime;
+    }
+
     public int golpeaTopo(int pos){
         try{
+            long initTime;
+            initTime=System.currentTimeMillis();
             out.writeUTF(cliente.getName() +":"+pos);
+
             int puntuacion = in.readInt();
+
+            if(Globals.debug) {
+                responseTime.add(System.currentTimeMillis() - initTime);
+            }
             return puntuacion;
         }catch (IOException ex) {
+            this.erroresTCP++;
             Logger.getLogger(ClienteTCP.class.getName()).log(Level.SEVERE, null, ex);
         }
         return -1;
@@ -67,6 +90,20 @@ public class ClienteTCP {
             out = new DataOutputStream(socket.getOutputStream());
         }catch (IOException ex) {
             Logger.getLogger(ClienteTCP.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void desconecta(){
+        try{
+            out.writeUTF(cliente.getName()+":kill");
+            in.readUTF();
+        }catch (IOException ex) {
+            Logger.getLogger(ClienteTCP.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            try {
+                this.socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

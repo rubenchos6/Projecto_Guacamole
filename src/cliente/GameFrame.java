@@ -1,55 +1,98 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cliente;
 
+import cliente.Cliente;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-public class GameFrame extends javax.swing.JFrame{
+/**
+ *
+ * @author padillandrea
+ */
+public class GameFrame extends javax.swing.JFrame {
+    private javax.swing.JButton[] botones;
     private String name;
     private Cliente cliente;
     private int currTopo = -1;
 
+    /**
+     * Creates new form Guacamole
+     */
+    public GameFrame() {
+        initComponents();
+    }
+
+    private void registro() {
+        ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("imagenes/jabon.png"));
+        ImageIcon iconoJabon = new ImageIcon(img.getImage().getScaledInstance(145, -1, java.awt.Image.SCALE_SMOOTH));
+        img = new ImageIcon(getClass().getClassLoader().getResource("imagenes/virus.png"));
+        ImageIcon iconoVirus = new ImageIcon(img.getImage().getScaledInstance(145, -1, java.awt.Image.SCALE_SMOOTH));
+        while (this.name == null || this.name.equals("")) {
+            this.name = (String) JOptionPane.showInputDialog(rootPane,
+                    "Escribe tu nombre:", "¡Pégale al virus! Registro del jugador",
+                    JOptionPane.INFORMATION_MESSAGE, iconoJabon, null, "");
+            if (this.name == null || this.name.equals("")) {
+                if (JOptionPane.showConfirmDialog(null,"Tu nombre está vacío. \n \n ¿Deseas salir del juego?",
+                        "¡Pégale al virus!", JOptionPane.YES_NO_OPTION,
+                        0, iconoVirus) == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
+            }
+        }
+        this.cliente = new Cliente(this, name);
+    }
+
+    private void comenzar() {
+        registro();
+        cliente.start();
+        while (!cliente.isInGame()) {
+            JOptionPane.showMessageDialog(this, "Ya hay un jugador con ese nombre. \n \n Por favor registra otro nombre.");
+            this.name = "";
+            registro();
+            cliente.start();
+        }
+        this.botones = new javax.swing.JButton[] {
+                virus1, virus2, virus3, virus4, virus5, virus6, virus7, virus8, virus9, virus10
+        };
+        usuario.setText(this.name);
+        puntaje.setText("0");
+
+    }
+
+    private void clicOnButton(int id) {
+        puntaje.setText(Integer.toString(golpeaTopo(id)));
+    }
+
     public void reportWinner(String winner) {
+        ImageIcon img = new ImageIcon(getClass().getClassLoader().getResource("imagenes/virus.png"));
+        ImageIcon icono = new ImageIcon(img.getImage().getScaledInstance(145, -1, java.awt.Image.SCALE_SMOOTH));
         if (name.equals(winner)) {
-            JOptionPane.showMessageDialog(this, "Felicidades, ganaste.");
+            if (JOptionPane.showConfirmDialog(null, "Felicidades, ganaste. \n \n ¿Quieres unirte a la siguiente partida?", "¡El juego ha terminado!",
+                    JOptionPane.YES_NO_OPTION, 0, icono) == JOptionPane.NO_OPTION) {
+                System.exit(0);
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Ya hay un ganador.");
+            if (JOptionPane.showConfirmDialog(null, "Ya hay un ganador. \n \n ¿Quieres unirte a la siguiente partida?", "¡El juego ha terminado!",
+                    JOptionPane.YES_NO_OPTION, 0, icono) == JOptionPane.NO_OPTION) {
+                System.exit(0);
+            }
         }
         cambiaTopo(-1);
-        label1.setText("Score: 0");
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public int getCurrTopo() {
-        return currTopo;
-    }
-
-    public void setCurrTopo(int currTopo) {
-        this.currTopo = currTopo;
+        puntaje.setText("0");
     }
 
     public void cambiaTopo(int id) {
         if (currTopo != -1) {
-            botones[currTopo].setText("JButtonN");
+            botones[currTopo].setIcon(null);
         }
         currTopo = id;
         if (id != -1)
-            botones[currTopo].setText("AQUI");
+            botones[currTopo].setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/topo.png")));
+
     }
 
     public int golpeaTopo(int i) {
@@ -61,13 +104,6 @@ public class GameFrame extends javax.swing.JFrame{
     }
 
     /**
-     * Creates new form GameFrame
-     */
-    public GameFrame() {
-        initComponents();
-    }
-
-    /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
@@ -76,272 +112,211 @@ public class GameFrame extends javax.swing.JFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        label1 = new java.awt.Label();
-        jButton11 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        contenedor = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        usuario = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        puntaje = new javax.swing.JLabel();
+        virus1 = new javax.swing.JButton();
+        virus2 = new javax.swing.JButton();
+        virus3 = new javax.swing.JButton();
+        virus4 = new javax.swing.JButton();
+        virus5 = new javax.swing.JButton();
+        virus6 = new javax.swing.JButton();
+        virus7 = new javax.swing.JButton();
+        virus8 = new javax.swing.JButton();
+        virus9 = new javax.swing.JButton();
+        virus10 = new javax.swing.JButton();
+        imagen = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("¡Pégale al virus!");
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        contenedor.setLayout(null);
+
+        jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 13)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Puntuación:");
+        contenedor.add(jLabel1);
+        jLabel1.setBounds(430, 0, 110, 30);
+
+        usuario.setText("<usuario>");
+        contenedor.add(usuario);
+        usuario.setBounds(180, 0, 180, 30);
+
+        jLabel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 1, 13)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Jugador (a):");
+        contenedor.add(jLabel2);
+        jLabel2.setBounds(70, 0, 110, 30);
+
+        puntaje.setText("<puntaje>");
+        contenedor.add(puntaje);
+        puntaje.setBounds(540, 0, 80, 30);
+
+        virus1.setBorderPainted(false);
+        virus1.setContentAreaFilled(false);
+        virus1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                virus1ActionPerformed(evt);
             }
         });
+        contenedor.add(virus1);
+        virus1.setBounds(30, 40, 70, 60);
 
-        jButton2.setText("jButton1");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        virus2.setBorderPainted(false);
+        virus2.setContentAreaFilled(false);
+        virus2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                virus2ActionPerformed(evt);
             }
         });
+        contenedor.add(virus2);
+        virus2.setBounds(270, 30, 70, 60);
 
-        jButton3.setText("jButton1");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        virus3.setBorderPainted(false);
+        virus3.setContentAreaFilled(false);
+        virus3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                virus3ActionPerformed(evt);
             }
         });
+        contenedor.add(virus3);
+        virus3.setBounds(620, 200, 70, 60);
 
-        jButton4.setText("jButton1");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        virus4.setBorderPainted(false);
+        virus4.setContentAreaFilled(false);
+        virus4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                virus4ActionPerformed(evt);
             }
         });
+        contenedor.add(virus4);
+        virus4.setBounds(70, 250, 70, 60);
 
-        jButton5.setText("jButton1");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        virus5.setBorderPainted(false);
+        virus5.setContentAreaFilled(false);
+        virus5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                virus5ActionPerformed(evt);
             }
         });
+        contenedor.add(virus5);
+        virus5.setBounds(250, 200, 70, 60);
 
-        jButton6.setText("jButton1");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        virus6.setBorderPainted(false);
+        virus6.setContentAreaFilled(false);
+        virus6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                virus6ActionPerformed(evt);
             }
         });
+        contenedor.add(virus6);
+        virus6.setBounds(70, 400, 70, 60);
 
-        jButton7.setText("jButton1");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        virus7.setBorderPainted(false);
+        virus7.setContentAreaFilled(false);
+        virus7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                virus7ActionPerformed(evt);
             }
         });
+        contenedor.add(virus7);
+        virus7.setBounds(420, 320, 70, 60);
 
-        jButton8.setText("jButton1");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        virus8.setBorderPainted(false);
+        virus8.setContentAreaFilled(false);
+        virus8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                virus8ActionPerformed(evt);
             }
         });
+        contenedor.add(virus8);
+        virus8.setBounds(570, 340, 70, 60);
 
-        jButton9.setText("jButton1");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
+        virus9.setBorderPainted(false);
+        virus9.setContentAreaFilled(false);
+        virus9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
+                virus9ActionPerformed(evt);
             }
         });
+        contenedor.add(virus9);
+        virus9.setBounds(500, 80, 70, 60);
 
-        jButton10.setText("jButton1");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        virus10.setBorderPainted(false);
+        virus10.setContentAreaFilled(false);
+        virus10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                virus10ActionPerformed(evt);
             }
         });
+        contenedor.add(virus10);
+        virus10.setBounds(290, 380, 70, 60);
 
-        label1.setText("label1");
-
-        jButton11.setLabel("Salir");
-        jButton11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton11ActionPerformed(evt);
-            }
-        });
-
-        jButton12.setLabel("Entrar");
-        jButton12.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton12ActionPerformed(evt);
-            }
-        });
-
-        jTextField1.setText("jTextField1");
+        imagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cubrebocas.jpg"))); // NOI18N
+        contenedor.add(imagen);
+        imagen.setBounds(0, 0, 730, 520);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(51, 51, 51)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jButton1)
-                                        .addComponent(jButton5))
-                                .addGap(45, 45, 45)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jButton6)
-                                                .addGap(62, 62, 62)
-                                                .addComponent(jButton7)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-                                                .addComponent(jButton8)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(93, 93, 93))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jButton2)
-                                                .addGap(50, 50, 50)
-                                                .addComponent(jButton3)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jButton4)
-                                                .addGap(144, 144, 144))))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(jButton12)
-                                                        .addGap(109, 109, 109)
-                                                        .addComponent(jButton11))
-                                                .addGroup(layout.createSequentialGroup()
-                                                        .addComponent(jButton9)
-                                                        .addGap(61, 61, 61)
-                                                        .addComponent(jButton10))))
-                                .addGap(283, 283, 283))
+                        .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(49, 49, 49)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(31, 31, 31)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(73, 73, 73)
-                                                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(54, 54, 54)
-                                                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton11)
-                                        .addComponent(jButton12))
-                                .addGap(96, 96, 96))
+                        .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
-
-        label1.getAccessibleContext().setAccessibleName("scoreLb");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    void clicOnButton(int id) {
-        label1.setText("Score: " + golpeaTopo(id));
-    }
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    private void virus1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_virus1ActionPerformed
         clicOnButton(0);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_virus1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+    private void virus2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_virus2ActionPerformed
         clicOnButton(1);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_virus2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+    private void virus3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_virus3ActionPerformed
         clicOnButton(2);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_virus3ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+    private void virus4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_virus4ActionPerformed
         clicOnButton(3);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_virus4ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+    private void virus5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_virus5ActionPerformed
         clicOnButton(4);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_virus5ActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+    private void virus6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_virus6ActionPerformed
         clicOnButton(5);
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_virus6ActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+    private void virus7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_virus7ActionPerformed
         clicOnButton(6);
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_virus7ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
+    private void virus8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_virus8ActionPerformed
         clicOnButton(7);
-    }//GEN-LAST:event_jButton8ActionPerformed
+    }//GEN-LAST:event_virus8ActionPerformed
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
+    private void virus9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_virus9ActionPerformed
         clicOnButton(8);
-    }//GEN-LAST:event_jButton9ActionPerformed
+    }//GEN-LAST:event_virus9ActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
+    private void virus10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_virus10ActionPerformed
         clicOnButton(9);
-    }//GEN-LAST:event_jButton10ActionPerformed
-
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton11ActionPerformed
-
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        // TODO add your handling code here:
-        this.name = jTextField1.getText();
-        if (name.equals("")) {
-            JOptionPane.showMessageDialog(this, "Escribe un nombre");
-        }
-        this.cliente = new Cliente(this, name);
-        this.botones = new javax.swing.JButton[] {
-                jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8, jButton9, jButton10
-        };
-        cliente.start();
-        if (!cliente.isInGame()) {
-            JOptionPane.showMessageDialog(this, "Ya hay un jugador con ese nombre. Espera la siguiente partida");
-        }
-
-    }//GEN-LAST:event_jButton12ActionPerformed
+    }//GEN-LAST:event_virus10ActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        System.setProperty("java.net.preferIPv4Stack", "true"); // Para el multicast
-
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -364,31 +339,34 @@ public class GameFrame extends javax.swing.JFrame{
             java.util.logging.Logger.getLogger(GameFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GameFrame().setVisible(true);
+                GameFrame guacamole = new GameFrame();
+                guacamole.comenzar();
+                guacamole.setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JTextField jTextField1;
-    private java.awt.Label label1;
+    private javax.swing.JPanel contenedor;
+    private javax.swing.JLabel imagen;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel puntaje;
+    private javax.swing.JLabel usuario;
+    private javax.swing.JButton virus1;
+    private javax.swing.JButton virus10;
+    private javax.swing.JButton virus2;
+    private javax.swing.JButton virus3;
+    private javax.swing.JButton virus4;
+    private javax.swing.JButton virus5;
+    private javax.swing.JButton virus6;
+    private javax.swing.JButton virus7;
+    private javax.swing.JButton virus8;
+    private javax.swing.JButton virus9;
     // End of variables declaration//GEN-END:variables
-
-    private javax.swing.JButton[] botones;
 }

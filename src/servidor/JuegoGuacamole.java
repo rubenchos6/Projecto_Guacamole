@@ -48,7 +48,7 @@ public class JuegoGuacamole {
         topoGolpeado=false;
     }
 
-    public int golpeJugador(String name, int i){
+    public synchronized int golpeJugador(String name, int i){
         int curr = puntuacion.get(name);
         if (finalizado || topoGolpeado) return curr;
         if (pos != i) return curr;

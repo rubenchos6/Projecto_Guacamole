@@ -43,4 +43,24 @@ public class ServidorRMI implements Registro {
         }
         return regis;
     }
+
+    @Override
+    public String enviaIPTCP() throws RemoteException {
+        return "localhost";
+    }
+
+    @Override
+    public String enviaIPMulticast() throws RemoteException {
+        return "239.192.0.1";
+    }
+
+    @Override
+    public int enviaTCPSocket() throws RemoteException {
+        return 7896;
+    }
+
+    @Override
+    public int enviaMulticastSocket() throws RemoteException {
+        return 6868;
+    }
 }

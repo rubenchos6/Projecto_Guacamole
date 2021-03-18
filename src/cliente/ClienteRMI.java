@@ -16,6 +16,11 @@ public class ClienteRMI {
     private long registerTime;
     private boolean error=false;
 
+    private String IPTCP;
+    private String IPMulticast;
+    private int TCPSocket;
+    private int MulticastSocket;
+
     public ClienteRMI(Cliente cliente) {
         this.cliente = cliente;
         System.setProperty("java.security.policy","file:src/cliente/client.policy");
@@ -29,6 +34,10 @@ public class ClienteRMI {
         try {
             registry = LocateRegistry.getRegistry("localhost");
             reg = (Registro) registry.lookup(name);
+            IPTCP = reg.enviaIPTCP();
+            IPMulticast = reg.enviaIPMulticast();
+            TCPSocket = reg.enviaTCPSocket();
+            MulticastSocket = reg.enviaMulticastSocket();
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (NotBoundException e) {
@@ -64,6 +73,22 @@ public class ClienteRMI {
 
     public void setReg(Registro reg) {
         this.reg = reg;
+    }
+
+    public String getIPTCP() {
+        return IPTCP;
+    }
+
+    public String getIPMulticast() {
+        return IPMulticast;
+    }
+
+    public int getTCPSocket() {
+        return TCPSocket;
+    }
+
+    public int getMulticastSocket() {
+        return MulticastSocket;
     }
 
     public long getRegisterTime() {

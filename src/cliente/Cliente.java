@@ -82,8 +82,8 @@ public class Cliente {
         System.setProperty("java.net.preferIPv4Stack", "true"); // Para el multicast
 
         rmi = new ClienteRMI(this);
-        multicast = new ClienteMulticast(this);
-        tcp = new ClienteTCP(this);
+        multicast = new ClienteMulticast(this, rmi.getIPMulticast(), rmi.getMulticastSocket());
+        tcp = new ClienteTCP(this, rmi.getIPTCP(), rmi.getTCPSocket());
 
         rmi.registra();
         if(!inGame) return;

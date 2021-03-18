@@ -11,13 +11,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClienteMulticast extends Thread{
-    private static int MULTICAST_PORT = 6868;
-    private static String IP_MULTICAST = "239.192.0.1";
+    //private static int MULTICAST_PORT = 6868;
+    //private static String IP_MULTICAST = "239.192.0.1";
     private MulticastSocket socket;
     private InetAddress direccion;
     private Cliente cliente;
 
-    public ClienteMulticast(Cliente cliente){
+    public ClienteMulticast(Cliente cliente, String IP_MULTICAST, int MULTICAST_PORT){
         this.cliente=cliente;
         try {
             direccion = InetAddress.getByName(IP_MULTICAST);

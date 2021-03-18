@@ -12,16 +12,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ClienteTCP {
-    private static int TCP_PORT=7896;
+//    private static int TCP_PORT=7896;
+    private int TCP_PORT;
+    private String IP_TCP;
     private Socket socket;
     private DataInputStream in;
     private int erroresTCP;
-
     private DataOutputStream out;
     private Cliente cliente;
     private List<Long> responseTime=new ArrayList<>();
-    public ClienteTCP(Cliente cliente){
+    public ClienteTCP(Cliente cliente,String IP_TCP, int TCP_PORT){
         this.cliente=cliente;
+        this.IP_TCP = IP_TCP;
+        this.TCP_PORT = TCP_PORT;
         this.erroresTCP=0;
     }
 
@@ -85,7 +88,8 @@ public class ClienteTCP {
     }
     public void conecta(){
         try{
-            this.socket=new Socket("localhost", TCP_PORT);
+            //this.socket=new Socket("localhost", TCP_PORT);
+            this.socket=new Socket(IP_TCP, TCP_PORT);
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
         }catch (IOException ex) {
